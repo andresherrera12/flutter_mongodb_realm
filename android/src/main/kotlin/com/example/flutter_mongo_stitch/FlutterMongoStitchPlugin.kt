@@ -201,6 +201,11 @@ public class FlutterMongoStitchPlugin: FlutterPlugin, MethodCallHandler {
 
         client.signInWithCustomJwt(token, App.Callback {
             if (it.isSuccess) {
+                val user: User? = it.get()
+                val mongoClient =  user?.getMongoClient(
+                  "mongodb-atlas"
+                )
+                client = MyMongoStitchClient(mongoClient, app)
                 result.success(it.get().toMap())
             } else {
                 result.error("ERROR", "Custom JWT Provider Login failed: ${it.error.message}", null)            }
